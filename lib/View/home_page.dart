@@ -26,17 +26,19 @@ class Home extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var model = Provider.of<Model>(context);
+    var model = Provider.of<Model>(context, listen: false);
     return Container(
       alignment: Alignment.center,
       child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Text(model.name2),
+            //? This is Just Like Provider.of<Class>(context, listen: false);
+            Text(context.watch<Model>().name2),
             ElevatedButton(
                 onPressed: () {
-                  model.doSomthingTwo();
+                  //? This is Just Like Provider.of<Class>(context, listen: true);
+                  context.read<Model>().doSomthingTwo();
                 },
                 style: const ButtonStyle(
                     backgroundColor: MaterialStatePropertyAll(Colors.green)),
