@@ -6,69 +6,50 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          centerTitle: true,
-          title: const Text(
-            "Learn Provider",
-            style: TextStyle(fontWeight: FontWeight.bold),
+    return ChangeNotifierProvider(
+      create: (context) => Model(),
+      child: Scaffold(
+          appBar: AppBar(
+            centerTitle: true,
+            title: const Text(
+              "Learn Provider",
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
           ),
-        ),
-        body: Container(
-          alignment: Alignment.center,
-          child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-            Selector<Model, int>(
-              selector: (context, value) => value.getshowOne,
-              builder: (context, crt1, child) {
-                return Text(crt1.toString(),
-                    style: const TextStyle(color: Colors.black, fontSize: 19));
-              },
-            ),
-            Consumer<Model>(
-              builder: (context, numOne, child) {
-                return ElevatedButton(
-                    onPressed: () {
-                      numOne.doSomthingOne();
-                    },
-                    style: const ButtonStyle(
-                        backgroundColor:
-                            MaterialStatePropertyAll(Colors.green)),
-                    child: const Text(
-                      "Do Somthing  1",
-                      style: TextStyle(color: Colors.white, fontSize: 16),
-                    ));
-              },
-            ),
-            const SizedBox(
-              height: 60,
-            ),
-            // ? Text
-            Selector<Model, String>(
-              selector: (context, value) => value.getshowTwo,
-              builder: (context, crt2, child) {
-                return Text(crt2,
-                    style: const TextStyle(color: Colors.black, fontSize: 19));
-              },
-            ),
-
-            // ? button
-            Consumer<Model>(builder: (context, nameTwo, widget) {
-              return ElevatedButton(
-                  onPressed: () {
-                    nameTwo.doSomthingTwo();
-                  },
-                  style: const ButtonStyle(
-                      backgroundColor: MaterialStatePropertyAll(Colors.green)),
-                  child: const Text(
-                    "Do Somthing 2",
-                    style: TextStyle(color: Colors.white, fontSize: 16),
-                  ));
-            })
-          ]),
-        ));
+          body: const Home()),
+    );
   }
 }
 
+class Home extends StatelessWidget {
+  const Home({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    var model = Provider.of<Model>(context);
+    return Container(
+      alignment: Alignment.center,
+      child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Text(model.name2),
+            ElevatedButton(
+                onPressed: () {
+                  model.doSomthingTwo();
+                },
+                style: const ButtonStyle(
+                    backgroundColor: MaterialStatePropertyAll(Colors.green)),
+                child: const Text(
+                  "Do Somthing",
+                  style: TextStyle(color: Colors.white, fontSize: 16),
+                ))
+          ]),
+    );
+  }
+}
+
+// * This is Model Class
 class Model extends ChangeNotifier {
   var name1 = 0;
   var name2 = "Amin";
