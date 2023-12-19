@@ -6,48 +6,56 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) => Model(),
-      child: Scaffold(
-          appBar: AppBar(
-            centerTitle: true,
-            title: const Text(
-              "Learn Provider",
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
+    return Scaffold(
+        appBar: AppBar(
+          centerTitle: true,
+          title: const Text(
+            "Learn Provider",
+            style: TextStyle(fontWeight: FontWeight.bold),
           ),
-          body: const Home()),
-    );
-  }
-}
-
-class Home extends StatelessWidget {
-  const Home({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    var model = Provider.of<Model>(context, listen: false);
-    return Container(
-      alignment: Alignment.center,
-      child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            //? This is Just Like Provider.of<Class>(context, listen: false);
-            Text(context.watch<Model>().name2),
-            ElevatedButton(
-                onPressed: () {
-                  //? This is Just Like Provider.of<Class>(context, listen: true);
-                  context.read<Model>().doSomthingTwo();
-                },
-                style: const ButtonStyle(
-                    backgroundColor: MaterialStatePropertyAll(Colors.green)),
-                child: const Text(
-                  "Do Somthing",
-                  style: TextStyle(color: Colors.white, fontSize: 16),
-                ))
-          ]),
-    );
+        ),
+        body: Container(
+          alignment: Alignment.center,
+          child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Selector<Model, String>(
+                    selector: (context, p1) => p1.getshowTwo,
+                    builder: (context, model, child) {
+                      return Text(model);
+                    }),
+                Consumer<ProveOne>(builder: (context, model, child) {
+                  return Text(model.state);
+                }),
+                Consumer<Model>(builder: (context, value, child) {
+                  return ElevatedButton(
+                      onPressed: () {
+                        value.doSomthingTwo();
+                      },
+                      style: const ButtonStyle(
+                          backgroundColor:
+                              MaterialStatePropertyAll(Colors.green)),
+                      child: const Text(
+                        "Do Somthing",
+                        style: TextStyle(color: Colors.white, fontSize: 16),
+                      ));
+                }),
+                Consumer<ProveOne>(builder: (context, value, child) {
+                  return ElevatedButton(
+                      onPressed: () {
+                        value.doSomthingOne();
+                      },
+                      style: const ButtonStyle(
+                          backgroundColor:
+                              MaterialStatePropertyAll(Colors.green)),
+                      child: const Text(
+                        "Do Somthing",
+                        style: TextStyle(color: Colors.white, fontSize: 16),
+                      ));
+                }),
+              ]),
+        ));
   }
 }
 
@@ -66,6 +74,17 @@ class Model extends ChangeNotifier {
 
   doSomthingTwo() {
     name2 = "Mohamed 🤍";
+    notifyListeners();
+  }
+}
+
+class ProveOne extends ChangeNotifier {
+  var state = "Oran";
+
+  get getshowOne => state;
+
+  doSomthingOne() {
+    state = "Alger";
     notifyListeners();
   }
 }
