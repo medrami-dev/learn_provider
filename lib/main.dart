@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:learn_provider/View/home_page.dart';
+import 'package:learn_provider/View/checkout.dart';
+import 'package:learn_provider/View/home.dart';
+import 'package:learn_provider/models/cart.dart';
 import 'package:provider/provider.dart';
 
 void main() {
@@ -13,15 +15,18 @@ class MainApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (context) => Model()),
-        ChangeNotifierProvider(create: (context) => ProveOne()),
+        ChangeNotifierProvider(create: (context) => Cart()),
       ],
       child: MaterialApp(
-          debugShowCheckedModeBanner: false,
-          theme: ThemeData(
-            useMaterial3: true,
-          ),
-          home: const HomePage()),
+        routes: {
+          '/': (context) => HomePage(),
+          '/checkout': (context) => const Checkout(),
+        },
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+          useMaterial3: true,
+        ),
+      ),
     );
   }
 }
